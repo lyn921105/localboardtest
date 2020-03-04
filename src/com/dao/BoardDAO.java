@@ -12,6 +12,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import com.entity.BoardDTO;
+import com.entity.PageTO;
 
 public class BoardDAO {
 	DataSource dataFactory;
@@ -355,4 +356,155 @@ public class BoardDAO {
 		}
 		return data;
 	}
+	
+	//답변글의 기존 repStep 1 증가
+	public void makeReply(int _root, int _step) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = dataFactory.getConnection();
+			StringBuffer query = new StringBuffer();
+			query.append("update board set repstep = repstep + 1 ");
+			query.append("where reproot = ? and repstep > ? ");
+			pstmt = con.prepareStatement(query.toString());
+			pstmt.setInt(1, _root);
+			pstmt.setInt(2, _step);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	} // 답변글 끝~
+	
+	//답변 달기
+	public void reply(BoardDTO dto) {
+		makeReply(dto.getRepRoot(), dto.getRepStep());
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = dataFactory.getConnection();
+			StringBuffer query = new StringBuffer();
+			query.append("insert into board(num, title, author, ");
+			query.append("content, reproot, repstep, repindent, passwd)");
+			query.append("values)board_seq.nextval, ?,?,?,?,?,?,?)");
+			pstmt = con.prepareStatement(query.toString());
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getAuthor());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4, dto.getRepRoot());
+			pstmt.setInt(5, dto.getRepStep());
+			pstmt.setInt(6, dto.getRepIndent());
+			pstmt.setString(7, dto.getPasswd());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	// 페이징 처리: 전체 레코드 갯수 구하기
+	public int totalCount() {
+		int count = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = dataFactory.getConnection();
+			String query = "select count(*) from board";
+			pstmt = con.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	} // 전체 글 수 구하기 끝~
+	
+	// 페이지 구현
+	public PageTO page(int curPage) {
+		PageTO to = new PageTO();
+		int totalCount = totalCount();
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = dataFactory.getConnection();
+			StringBuffer query = new StringBuffer();
+			query.append("select num, author, title, content, ");
+			query.append("to_char(writeday, 'yyyy/mm/dd') writeday, ");
+			query.append("readcnt, reproot, repstep, repindent");
+			query.append("from board order by reproot desc, repstep asc");
+			pstmt = con.prepareStatement(query.toString(),
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			rs = pstmt.executeQuery();
+			
+			int perPage = to.getPerPage();
+			int skip = (curPage - 1) * perPage;
+			if (skip > 0) {
+				rs.absolute(skip);
+			}
+			for (int i = 0; i < perPage && rs.next(); i++) {
+				BoardDTO data = new BoardDTO();
+				data.setNum(rs.getInt("num"));
+				data.setAuthor(rs.getString("author"));
+				data.setTitle(rs.getString("title"));
+				data.setContent(rs.getString("content"));
+				data.setWriteday(rs.getString("writeday"));
+				data.setReadcnt(rs.getInt("readcnt"));
+				data.setRepRoot(rs.getInt("repRoot"));
+				data.setRepStep(rs.getInt("repStep"));
+				data.setRepIndent(rs.getInt("repIndent"));
+				list.add(data);
+			}
+			
+			to.setList(list);
+			to.setTotalCount(totalCount);
+			to.setCurPage(curPage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return to;
+	} // 페이징 끝~
 }

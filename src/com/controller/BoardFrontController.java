@@ -11,9 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.service.BoardCommand;
 import com.service.BoardDeleteCommand;
 import com.service.BoardListCommand;
-<<<<<<< HEAD
-import com.service.BoardWriteCommand;
-=======
+import com.service.BoardPageCommand;
+import com.service.BoardReplyCommand;
 import com.service.BoardReplyUICommand;
 import com.service.BoardRetrieveCommand;
 import com.service.BoardSearchCommand;
@@ -21,7 +20,6 @@ import com.service.BoardUpdateCommand;
 import com.service.BoardWriteCommand;
 import com.service.BoardpwdCheckCommand;
 import com.service.BoardpwdCheckFormCommand;
->>>>>>> 0d791fec4bd1d96c6b3d315bc468c7378ee958e5
 
 /**
  * Servlet implementation class BoardFrontController
@@ -70,11 +68,7 @@ public class BoardFrontController extends HttpServlet {
 		}
 
 		// 글쓰기
-<<<<<<< HEAD
-		if(com.equals("/write.do")) {
-=======
 		if (com.equals("/write.do")) {
->>>>>>> 0d791fec4bd1d96c6b3d315bc468c7378ee958e5
 			command = new BoardWriteCommand();
 			command.execute(request, response);
 			nextPage = "list.do";
@@ -139,6 +133,20 @@ public class BoardFrontController extends HttpServlet {
 			command = new BoardReplyUICommand();
 			command.execute(request, response);
 			nextPage = "reply.jsp";
+		}
+
+		// 답변글 쓰기
+		if (com.equals("/reply.do")) {
+			command = new BoardReplyCommand();
+			command.execute(request, response);
+			nextPage = "list.do";
+		}
+		
+		// 페이징 처리
+		if (com.equals("/list.do")) {
+			command = new BoardPageCommand();
+			command.execute(request, response);
+			nextPage = "listPage.jsp";
 		}
 
 		RequestDispatcher dis = request.getRequestDispatcher(nextPage);
