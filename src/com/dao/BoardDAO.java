@@ -74,7 +74,7 @@ public class BoardDAO {
 			con = dataFactory.getConnection();
 			StringBuffer query = new StringBuffer();
 			query.append(
-					"insert into board(num, title, author, content, repRoot, repste[, repindent, password) values(board_seq.nextvla, ?, ?, ?, board_seq.currvalm 0,0,?)");
+					"insert into board(num, title, author, content, repRoot, repstep, repindent, password) values(board_seq.nextval, ?, ?, ?, board_seq.currval, 0,0,?)");
 
 			pstmt = con.prepareStatement(query.toString());
 			pstmt.setString(1, dto.getTitle());
