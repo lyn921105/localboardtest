@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.service.BoardCommand;
 import com.service.BoardListCommand;
 import com.service.BoardWriteCommand;
+import com.service.BoardpwdCheckCommand;
+import com.service.BoardpwdCheckFormCommand;
 
 /**
  * Servlet implementation class BoardFrontController
@@ -41,9 +43,9 @@ public class BoardFrontController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");
-		String requsetURI = request.getRequestURI();
+		String requestURI = request.getRequestURI();
 		String contextPath = request.getContextPath();
-		String com = requsetURI.substring(contextPath.length());
+		String com = requestURI.substring(contextPath.length());
 		BoardCommand command = null;
 		String nextPage = null;
 		
@@ -61,14 +63,28 @@ public class BoardFrontController extends HttpServlet {
 			nextPage = "list.do";
 		}
 		
-		//글쓰기 폼
+		// 글쓰기 폼
 		if(com.equals("/writeui.do")) {
 			nextPage = "write.jsp";
 		}
 		
+		//비밀번호 입력화면
+		if(com.equals("/pwdCheckui.do")) {
+			command=new BoardpwdCheckFormCommand();
+			command.execute(request, response);
+			nextPage="passwdChk.jsp";
+		}
+		
+		// 비밀번호 체크
+		if(com.equals("/pwdCheck.do")) {
+			command=new BoardpwdCheckCommand();
+			command.execute(request, response);
+			nextPage=(String) request.getAttribute("resultUrl");
+		}
 		
 		RequestDispatcher dis = request.getRequestDispatcher(nextPage);
 		dis.forward(request, response);
+		
 	}
 
 }

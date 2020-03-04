@@ -23,10 +23,10 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 	} // end 생성자
-		// 목록보기
-
+	
+	// 목록보기
 	public ArrayList<BoardDTO> list() {
-		ArrayList<BoardDTO> list = new ArrayList<>();
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -65,11 +65,11 @@ public class BoardDAO {
 		}
 		return list;
 	} // end select
-		// end class
 
 	public void write(BoardDTO dto) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+
 		try {
 			con = dataFactory.getConnection();
 			StringBuffer query = new StringBuffer();
@@ -81,21 +81,21 @@ public class BoardDAO {
 			pstmt.setString(2, dto.getAuthor());
 			pstmt.setString(3, dto.getContent());
 			pstmt.setString(4, dto.getPasswd());
-			int n = pstmt.executeUpdate();
+			pstmt.executeUpdate();
+
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			try {
-				if (pstmt != null)
+				if (pstmt != null) {
 					pstmt.close();
-				if (con != null)
+				}
+				if (con != null) {
 					con.close();
+				}
 			} catch (SQLException e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
-		}
-
-	}
-}
+		} // end finally
+	} //end write
+} // end class
