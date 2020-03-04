@@ -27,7 +27,7 @@
 				<td><textarea name="content" cols="80" rows="5"></textarea></td>
 			</tr>
 			<tr>
-				<td>제목</td>
+				<td>비밀번호</td>
 				<td><input type="password" name="passwd"></td>
 			</tr>
 		</table>

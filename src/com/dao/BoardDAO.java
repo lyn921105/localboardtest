@@ -14,29 +14,19 @@ import com.entity.BoardDTO;
 public class BoardDAO {
 	DataSource dataFactory;
 
-<<<<<<< HEAD
-	public BoardDAO() { // �깮�꽦�옄
-		// DataSource �뼸湲�, 而ㅻ꽖�뀡 �� �궗�슜
-=======
 	public BoardDAO() { // 생성자
 		// DataSource 얻기, 커넥션 풀 사용
->>>>>>> 423f84ea1798fda25590c7a19a965dc23762b541
 		try {
 			Context ctx = new InitialContext();
 			dataFactory = (DataSource) ctx.lookup("java:comp/env/jdbc/Oracle11g");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-	} // end �깮�꽦�옄
-		// 紐⑸줉蹂닿린
-=======
 	} // end 생성자
-		// 목록보기
->>>>>>> 423f84ea1798fda25590c7a19a965dc23762b541
-
+	
+	// 목록보기
 	public ArrayList<BoardDTO> list() {
-		ArrayList<BoardDTO> list = new ArrayList<>();
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -75,36 +65,23 @@ public class BoardDAO {
 		}
 		return list;
 	} // end select
-<<<<<<< HEAD
-=======
-		// end class
->>>>>>> 423f84ea1798fda25590c7a19a965dc23762b541
 
 	public void write(BoardDTO dto) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-<<<<<<< HEAD
 
-		try {
-			con = dataFactory.getConnection();
-			StringBuffer query = new StringBuffer();
-			query.append(
-					"insert into board(num, title, author, content, repRoot, repstep, repindent, password) values(board_seq.nextval, ?, ?, ?, board_seq.currval, 0,0,?)");
-
-=======
 		try {
 			con = dataFactory.getConnection();
 			StringBuffer query = new StringBuffer();
 			query.append("INSERT INTO board (num, title, author, content,");
 			query.append("repRoot, repStep, repIndent, passwd) values");
 			query.append("(board_seq.nextval,?,?,?,board_seq.currval,0,0,?)");
->>>>>>> 423f84ea1798fda25590c7a19a965dc23762b541
 			pstmt = con.prepareStatement(query.toString());
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getAuthor());
 			pstmt.setString(3, dto.getContent());
 			pstmt.setString(4, dto.getPasswd());
-<<<<<<< HEAD
+			pstmt.executeUpdate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,25 +97,5 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		} // end finally
-	}
+	} //end write
 } // end class
-=======
-			int n = pstmt.executeUpdate();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null)
-					pstmt.close();
-				if (con != null)
-					con.close();
-			} catch (SQLException e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
-		}
-
-	}
-}
->>>>>>> 423f84ea1798fda25590c7a19a965dc23762b541
