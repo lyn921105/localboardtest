@@ -53,17 +53,19 @@ public class BoardFrontController extends HttpServlet {
 			nextPage = "list.jsp";
 		}
 		
+		// 글쓰기
 		if(com.equals("/write.do")) {
 			command = new BoardListCommand();
 			command.execute(request, response);
 			nextPage = "list.do";
 		}
+		
 		//글쓰기 폼
 		if(com.equals("/writeui.do")) {
 			nextPage = "write.jsp";
 		}
 		
-		// 글쓰기
+		
 		RequestDispatcher dis = request.getRequestDispatcher(nextPage);
 		dis.forward(request, response);
 	}
