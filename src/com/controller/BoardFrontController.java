@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.service.BoardCommand;
 import com.service.BoardListCommand;
+import com.service.BoardWriteCommand;
 
 /**
  * Servlet implementation class BoardFrontController
@@ -55,7 +56,7 @@ public class BoardFrontController extends HttpServlet {
 		
 		// 글쓰기
 		if(com.equals("/write.do")) {
-			command = new BoardListCommand();
+			command = new BoardWriteCommand();
 			command.execute(request, response);
 			nextPage = "list.do";
 		}
