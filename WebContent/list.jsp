@@ -35,7 +35,7 @@
 				<td>${dto.title}</td>
 				<td>${dto.author}</td>
 				<td>${dto.writeday}</td>
-				<td>${dto.readcny}</td>
+				<td>${dto.readcnt}</td>
 			</tr>
 		</c:forEach>
 	</table>
