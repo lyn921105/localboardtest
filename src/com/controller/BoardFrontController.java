@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.service.BoardCommand;
 import com.service.BoardDeleteCommand;
 import com.service.BoardListCommand;
+<<<<<<< HEAD
+import com.service.BoardWriteCommand;
+=======
 import com.service.BoardReplyUICommand;
 import com.service.BoardRetrieveCommand;
 import com.service.BoardSearchCommand;
@@ -18,6 +21,7 @@ import com.service.BoardUpdateCommand;
 import com.service.BoardWriteCommand;
 import com.service.BoardpwdCheckCommand;
 import com.service.BoardpwdCheckFormCommand;
+>>>>>>> 0d791fec4bd1d96c6b3d315bc468c7378ee958e5
 
 /**
  * Servlet implementation class BoardFrontController
@@ -66,7 +70,11 @@ public class BoardFrontController extends HttpServlet {
 		}
 
 		// 글쓰기
+<<<<<<< HEAD
+		if(com.equals("/write.do")) {
+=======
 		if (com.equals("/write.do")) {
+>>>>>>> 0d791fec4bd1d96c6b3d315bc468c7378ee958e5
 			command = new BoardWriteCommand();
 			command.execute(request, response);
 			nextPage = "list.do";
