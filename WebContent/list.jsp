@@ -17,6 +17,7 @@
 				<form action="search.do">
 					<select name="searchName" size="1">
 						<option value="author">작성자</option>
+						<option value="title">글제목</option>
 					</select> <input type="text" name="searchValue"> <input
 						type="submit" value="찾기">
 				</form>
